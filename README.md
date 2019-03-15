@@ -1,5 +1,5 @@
 ### learn-opengl
-[Download](https://www.glfw.org) and extract the GLFW source code into `lib/glfw`
+Fetch the GLFW submodule and generate the build with CMake
 ```
 mkdir build
 cd build
