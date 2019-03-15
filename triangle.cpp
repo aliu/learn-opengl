@@ -1,9 +1,9 @@
-#include <iostream>
+#include "triangle.h"
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-
-#include "triangle.h"
+#include <iostream>
+#include <string>
 
 const char *vertex_shader_source = R"(
 #version 330 core
@@ -19,40 +19,38 @@ const char *fragment_shader_source = R"(
 out vec4 FragColor;
 
 void main() {
-  FragColor = vec4(0.0f, 1.0f, 1.0f, 1.0f);
+  FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
 }
 )";
 
-float vertices[] = {
+const float vertices[] = {
   -0.5f, -0.5f, 0.0f,
   0.5f, -0.5f, 0.0f,
   0.0f, 0.5f, 0.0f
 };
 
-Triangle::Triangle() {
+void Triangle::init() {
   int success;
   char info_log[512];
 
-  unsigned int vertex_shader;
-  vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+  unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
   glCompileShader(vertex_shader);
   glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
 
   if (!success) {
     glGetShaderInfoLog(vertex_shader, 512, NULL, info_log);
-    std::cout << "Failed to compile vertex shader:\n" << info_log << std::endl;
+    std::cerr << "Failed to compile vertex shader:\n" << info_log << std::endl;
   }
 
-  unsigned int fragment_shader;
-  fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+  unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
   glCompileShader(fragment_shader);
   glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
 
   if (!success) {
     glGetShaderInfoLog(fragment_shader, 512, NULL, info_log);
-    std::cout << "Failed to compile fragment shader:\n" << info_log << std::endl;
+    std::cerr << "Failed to compile fragment shader:\n" << info_log << std::endl;
   }
 
   shader_program = glCreateProgram();
@@ -63,10 +61,9 @@ Triangle::Triangle() {
 
   if (!success) {
     glGetProgramInfoLog(shader_program, 512, NULL, info_log);
-    std::cout << "Failed to link program:\n" << info_log << std::endl;
+    std::cerr << "Failed to link program:\n" << info_log << std::endl;
   }
 
-  glUseProgram(shader_program);
   glDeleteShader(vertex_shader);
   glDeleteShader(fragment_shader);
 
@@ -76,20 +73,31 @@ Triangle::Triangle() {
   glBindVertexArray(VAO);
   glBindBuffer(GL_ARRAY_BUFFER, VBO);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*) 0);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
   glEnableVertexAttribArray(0);
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
 }
 
+void Triangle::draw() {
+  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClear(GL_COLOR_BUFFER_BIT);
+
+  glUseProgram(shader_program);
+  glBindVertexArray(VAO);
+  glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+Triangle::Triangle(int width, int height, std::string title)
+    : Window{width, height, title} {}
+
 Triangle::~Triangle() {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
 }
 
-void Triangle::draw() {
-  glUseProgram(shader_program);
-  glBindVertexArray(VAO);
-  glDrawArrays(GL_TRIANGLES, 0, 3);
+int main() {
+  Triangle window{500, 500, "Triangle"};
+  window.run();
 }

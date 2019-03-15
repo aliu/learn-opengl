@@ -10,6 +10,6 @@ set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
 add_subdirectory(lib/glfw)
 
 include_directories(glad/include)
-add_executable(learn-opengl glad/src/glad.c main.cpp triangle.cpp)
 
-target_link_libraries(learn-opengl glfw)
+add_executable(triangle glad/src/glad.c triangle.cpp window.cpp)
+target_link_libraries(triangle glfw)
