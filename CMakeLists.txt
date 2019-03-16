@@ -11,5 +11,5 @@ add_subdirectory(lib/glfw)
 
 include_directories(glad/include)
 
-add_executable(triangle glad/src/glad.c util/window.cpp util/shader.cpp triangle.cpp)
+add_executable(triangle glad/src/glad.c util/gl.cpp triangle.cpp)
 target_link_libraries(triangle glfw)

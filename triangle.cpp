@@ -1,11 +1,9 @@
-#include "triangle.h"
-#include "util/shader.h"
+#include "util/gl.h"
 
 #include <glad/glad.h>
-#include <iostream>
-#include <string>
+#include <GLFW/glfw3.h>
 
-const char *vertex_shader = R"(
+const char *vertexShader = R"(
 #version 330 core
 layout (location = 0) in vec3 aPos;
 
@@ -14,7 +12,7 @@ void main() {
 }
 )";
 
-const char *fragment_shader = R"(
+const char *fragmentShader = R"(
 #version 330 core
 out vec4 FragColor;
 
@@ -23,14 +21,15 @@ void main() {
 }
 )";
 
-const float vertices[] = {
+GLuint VAO, VBO, shader;
+float vertices[] = {
   -0.5f, 0.5f, 0.0f,
   -0.5f, -0.5f, 0.0f,
   0.5f, -0.5f, 0.0f
 };
 
-void Triangle::init() {
-  shader.compile(vertex_shader, fragment_shader);
+void init() {
+  shader = gl::compileShader(vertexShader, fragmentShader);
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -45,29 +44,22 @@ void Triangle::init() {
   glBindVertexArray(0);
 }
 
-void Triangle::draw() {
+void loop(GLFWwindow *window) {
+  if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+    glfwSetWindowShouldClose(window, true);
+  }
+
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  shader.use();
-
+  glUseProgram(shader);
   glBindVertexArray(VAO);
   glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
-Triangle::Triangle(int width, int height, std::string title)
-    : Window(width, height, title) {}
-
-Triangle::~Triangle() {
+void cleanup() {
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
 }
 
-int main() {
-  Triangle window(500, 500, "Triangle");
-  try {
-    window.run();
-  } catch (std::exception &e) {
-    std::cerr << e.what() << std::endl;
-  }
-}
+int main() { gl::run({"Triangle"}, init, loop, cleanup); }
