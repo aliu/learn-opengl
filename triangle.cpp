@@ -1,7 +1,6 @@
 #include "triangle.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <iostream>
 #include <string>
 
@@ -24,16 +23,16 @@ void main() {
 )";
 
 const float vertices[] = {
+  -0.5f, 0.5f, 0.0f,
   -0.5f, -0.5f, 0.0f,
-  0.5f, -0.5f, 0.0f,
-  0.0f, 0.5f, 0.0f
+  0.5f, -0.5f, 0.0f
 };
 
 void Triangle::init() {
-  int success;
-  char info_log[512];
+  GLint success;
+  GLchar info_log[512];
 
-  unsigned int vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+  GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
   glShaderSource(vertex_shader, 1, &vertex_shader_source, NULL);
   glCompileShader(vertex_shader);
   glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
@@ -43,7 +42,7 @@ void Triangle::init() {
     std::cerr << "Failed to compile vertex shader:\n" << info_log << std::endl;
   }
 
-  unsigned int fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+  GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
   glShaderSource(fragment_shader, 1, &fragment_shader_source, NULL);
   glCompileShader(fragment_shader);
   glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
@@ -90,7 +89,7 @@ void Triangle::draw() {
 }
 
 Triangle::Triangle(int width, int height, std::string title)
-    : Window{width, height, title} {}
+    : Window(width, height, title) {}
 
 Triangle::~Triangle() {
   glDeleteVertexArrays(1, &VAO);
@@ -98,6 +97,6 @@ Triangle::~Triangle() {
 }
 
 int main() {
-  Triangle window{500, 500, "Triangle"};
+  Triangle window(500, 500, "Triangle");
   window.run();
 }

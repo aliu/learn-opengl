@@ -1,10 +1,11 @@
 #include "window.h"
 
+#include <glad/glad.h>
 #include <string>
 
 class Triangle : public Window {
-  unsigned int shader_program;
-  unsigned int VAO, VBO;
+  GLuint shader_program;
+  GLuint VAO, VBO;
 
   void init() override;
   void draw() override;

@@ -18,7 +18,7 @@ void Window::input(GLFWwindow *window) {
 }
 
 Window::Window(int width, int height, std::string title)
-    : width{width}, height{height}, title{title} {}
+    : width(width), height(height), title(title) {}
 
 Window::~Window() {
   glfwDestroyWindow(handle);
