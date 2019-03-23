@@ -12,11 +12,11 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
 
 add_subdirectory(lib)
 
-add_custom_target(copy_resources ALL
+add_custom_target(assets ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory
-    ${CMAKE_CURRENT_SOURCE_DIR}/res
-    ${CMAKE_BINARY_DIR}/res)
+    ${CMAKE_CURRENT_SOURCE_DIR}/assets
+    ${CMAKE_BINARY_DIR}/assets)
 
 add_executable(triangle triangle.cpp)
 target_link_libraries(triangle PRIVATE util)
-add_dependencies(triangle copy_resources)
+add_dependencies(triangle assets)

@@ -11,7 +11,7 @@ float vertices[] = {
 };
 
 void init() {
-  program = gl::shader({"res/triangle.vert", "res/triangle.frag"});
+  program = gl::shader({"triangle.vert", "triangle.frag"});
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
