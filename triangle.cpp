@@ -3,25 +3,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-const char *vertexShader = R"(
-#version 330 core
-layout (location = 0) in vec3 aPos;
-
-void main() {
-  gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);
-}
-)";
-
-const char *fragmentShader = R"(
-#version 330 core
-out vec4 FragColor;
-
-void main() {
-  FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);
-}
-)";
-
-GLuint VAO, VBO, shader;
+GLuint program, VAO, VBO;
 float vertices[] = {
   -0.5f, 0.5f, 0.0f,
   -0.5f, -0.5f, 0.0f,
@@ -29,7 +11,7 @@ float vertices[] = {
 };
 
 void init() {
-  shader = gl::compileShader(vertexShader, fragmentShader);
+  program = gl::shader({"res/triangle.vert", "res/triangle.frag"});
 
   glGenVertexArrays(1, &VAO);
   glGenBuffers(1, &VBO);
@@ -52,12 +34,13 @@ void loop(GLFWwindow *window) {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
-  glUseProgram(shader);
+  glUseProgram(program);
   glBindVertexArray(VAO);
   glDrawArrays(GL_TRIANGLES, 0, 3);
 }
 
 void cleanup() {
+  glDeleteProgram(program);
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
 }

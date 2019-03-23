@@ -2,9 +2,12 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <fstream>
 #include <functional>
 #include <iostream>
+#include <sstream>
 #include <string>
+#include <vector>
 
 const GLsizei LOG_SIZE = 1024;
 GLchar infoLog[LOG_SIZE];
@@ -13,8 +16,27 @@ void resize(GLFWwindow *window, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-GLuint compile(const char *source, GLenum type) {
-  GLuint shader = glCreateShader(type);
+std::string read(const std::string &filename) {
+  std::ifstream file(filename);
+  std::stringstream buffer;
+  buffer << file.rdbuf();
+  return buffer.str();
+}
+
+GLuint create(const std::string &filename) {
+  std::string ext = filename.substr(filename.rfind('.') + 1);
+  if (ext == "vert")
+    return glCreateShader(GL_VERTEX_SHADER);
+  if (ext == "frag")
+    return glCreateShader(GL_FRAGMENT_SHADER);
+  return 0;
+}
+
+GLuint compile(const std::string &filename) {
+  GLuint shader = create(filename);
+  std::string s = read(filename);
+  const char *source = s.c_str();
+
   glShaderSource(shader, 1, &source, NULL);
   glCompileShader(shader);
 
@@ -62,13 +84,16 @@ void gl::run(gl::Options options, std::function<void()> init,
   glfwTerminate();
 }
 
-GLuint gl::compileShader(const char *vertexShader, const char *fragmentShader) {
-  GLuint vs = compile(vertexShader, GL_VERTEX_SHADER);
-  GLuint fs = compile(fragmentShader, GL_FRAGMENT_SHADER);
-
+GLuint gl::shader(const std::vector<std::string> &files) {
   GLuint program = glCreateProgram();
-  glAttachShader(program, vs);
-  glAttachShader(program, fs);
+  std::vector<GLuint> shaders;
+
+  for (auto &file : files) {
+    GLuint shader = compile(file);
+    glAttachShader(program, shader);
+    shaders.push_back(shader);
+  }
+
   glLinkProgram(program);
 
   GLint success;
@@ -78,7 +103,10 @@ GLuint gl::compileShader(const char *vertexShader, const char *fragmentShader) {
     std::cerr << "Failed to link program:\n" << infoLog;
   }
 
-  glDeleteShader(vs);
-  glDeleteShader(fs);
+  for (GLuint shader : shaders) {
+    glDetachShader(program, shader);
+    glDeleteShader(shader);
+  }
+
   return program;
 }

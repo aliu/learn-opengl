@@ -4,6 +4,7 @@
 #include <GLFW/glfw3.h>
 #include <functional>
 #include <string>
+#include <vector>
 
 namespace gl {
 
@@ -15,6 +16,6 @@ struct Options {
 void run(Options options, std::function<void()> init,
          std::function<void(GLFWwindow*)> loop, std::function<void()> cleanup);
 
-GLuint compileShader(const char *vertexShader, const char *fragmentShader);
+GLuint shader(const std::vector<std::string> &files);
 
 } // namespace gl
