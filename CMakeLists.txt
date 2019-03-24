@@ -20,3 +20,7 @@ add_custom_target(assets ALL
 add_executable(triangle triangle.cpp)
 target_link_libraries(triangle PRIVATE util)
 add_dependencies(triangle assets)
+
+add_executable(texture texture.cpp)
+target_link_libraries(texture PRIVATE util)
+add_dependencies(texture assets)
