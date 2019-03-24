@@ -1,7 +1,6 @@
 #include "util/gl.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -39,18 +38,18 @@ GLuint compile(const std::string &filename) {
   glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
   if (!success) {
     glGetShaderInfoLog(shader, LOG_SIZE, NULL, infoLog);
-    std::cerr << "Failed to compile shader:\n" << infoLog;
+    std::cerr << "Failed to compile shader: " << filename << '\n' << infoLog;
   }
 
   return shader;
 }
 
-GLuint gl::shader(const std::vector<std::string> &files) {
+GLuint gl::shader(const std::vector<std::string> &filenames) {
   GLuint program = glCreateProgram();
   std::vector<GLuint> shaders;
 
-  for (auto &file : files) {
-    GLuint shader = compile(file);
+  for (auto &filename : filenames) {
+    GLuint shader = compile(filename);
     glAttachShader(program, shader);
     shaders.push_back(shader);
   }

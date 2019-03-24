@@ -13,9 +13,12 @@ struct Options {
   int width = 500, height = 500;
 };
 
-void run(Options options, std::function<void()> init,
-         std::function<void(GLFWwindow*)> loop, std::function<void()> cleanup);
+void run(Options options,
+         std::function<void()> init,
+         std::function<void(GLFWwindow*)> loop,
+         std::function<void()> cleanup);
 
-GLuint shader(const std::vector<std::string> &files);
+GLuint shader(const std::vector<std::string> &filenames);
+GLuint texture2D(const std::string &filename);
 
 } // namespace gl
