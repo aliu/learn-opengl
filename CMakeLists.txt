@@ -13,6 +13,7 @@ add_custom_target(assets ALL
     ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/assets)
 
 set(SOURCES
+  cube
   texture
   triangle)
 
