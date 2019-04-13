@@ -5,11 +5,6 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)
-
 add_subdirectory(lib)
 
 add_custom_target(assets ALL
@@ -17,10 +12,11 @@ add_custom_target(assets ALL
     ${CMAKE_CURRENT_SOURCE_DIR}/assets
     ${CMAKE_BINARY_DIR}/assets)
 
-add_executable(triangle triangle.cpp)
-target_link_libraries(triangle PRIVATE util)
-add_dependencies(triangle assets)
+set(SOURCES
+  texture
+  triangle)
 
-add_executable(texture texture.cpp)
-target_link_libraries(texture PRIVATE util)
-add_dependencies(texture assets)
+foreach(source ${SOURCES})
+  add_executable(${source} ${source}.cpp)
+  target_link_libraries(${source} PRIVATE util)
+endforeach()
