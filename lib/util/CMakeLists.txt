@@ -8,6 +8,8 @@ add_library(util STATIC
 
 if(WIN32)
   target_sources(util PRIVATE src/win32_fs.cpp)
+elseif(APPLE)
+  target_sources(util PRIVATE src/osx_fs.cpp)
 endif()
 
 target_include_directories(util PUBLIC include)
