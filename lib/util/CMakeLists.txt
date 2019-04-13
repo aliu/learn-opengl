@@ -11,4 +11,4 @@ if(WIN32)
 endif()
 
 target_include_directories(util PUBLIC include)
-target_link_libraries(util PUBLIC glfw glad)
+target_link_libraries(util PUBLIC glfw glad glm)
