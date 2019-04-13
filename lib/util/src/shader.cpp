@@ -1,4 +1,5 @@
 #include "util/gl.h"
+#include "fs.h"
 
 #include <glad/glad.h>
 #include <fstream>
@@ -11,7 +12,7 @@ const GLsizei LOG_SIZE = 1024;
 GLchar infoLog[LOG_SIZE];
 
 std::string read(const std::string &filename) {
-  std::ifstream file("assets/shaders/" + filename);
+  std::ifstream file(fs::getPath("assets/shaders/" + filename));
   std::stringstream buffer;
   buffer << file.rdbuf();
   return buffer.str();

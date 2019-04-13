@@ -10,7 +10,7 @@ add_subdirectory(lib)
 add_custom_target(assets ALL
   COMMAND ${CMAKE_COMMAND} -E copy_directory
     ${CMAKE_CURRENT_SOURCE_DIR}/assets
-    ${CMAKE_BINARY_DIR}/assets)
+    ${CMAKE_BINARY_DIR}/${CMAKE_CFG_INTDIR}/assets)
 
 set(SOURCES
   texture

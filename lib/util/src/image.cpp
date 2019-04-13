@@ -1,4 +1,5 @@
 #include "util/gl.h"
+#include "fs.h"
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
@@ -8,7 +9,7 @@
 
 GLuint gl::texture2D(const std::string &filename) {
   GLuint texture;
-  std::string path = "assets/textures/" + filename;
+  std::string path = fs::getPath("assets/textures/" + filename);
 
   glGenTextures(1, &texture);
   glBindTexture(GL_TEXTURE_2D, texture);
