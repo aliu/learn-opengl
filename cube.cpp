@@ -90,9 +90,13 @@ void loop(GLFWwindow *window) {
   glUseProgram(program);
   glBindVertexArray(VAO);
 
+  int width, height;
+  glfwGetFramebufferSize(window, &width, &height);
+  float ratio = (float)width / (float)height;
+
   glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
   glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
-  glm::mat4 projection = glm::perspective(0.25f * glm::pi<float>(), 1.0f, 0.1f, 100.0f);
+  glm::mat4 projection = glm::perspective(0.25f * glm::pi<float>(), ratio, 0.1f, 100.0f);
   glm::mat4 transform = projection * view * model;
   glUniformMatrix4fv(glGetUniformLocation(program, "transform"), 1, GL_FALSE, glm::value_ptr(transform));
 
