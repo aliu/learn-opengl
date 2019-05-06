@@ -2,23 +2,21 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <functional>
+#include <initializer_list>
 #include <string>
-#include <vector>
 
 namespace gl {
 
-struct Options {
-  std::string title;
-  int width = 500, height = 500;
+struct Window {
+  GLFWwindow *handle;
+
+  Window(std::string title, int width, int height);
+  ~Window();
+
+  explicit operator bool();
 };
 
-void run(Options options,
-         std::function<void()> init,
-         std::function<void(GLFWwindow*)> loop,
-         std::function<void()> cleanup);
-
-GLuint shader(const std::vector<std::string> &filenames);
+GLuint shader(std::initializer_list<std::string> filenames);
 GLuint texture2D(const std::string &filename);
 
 } // namespace gl

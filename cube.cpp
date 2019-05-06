@@ -80,7 +80,7 @@ void init() {
   glUniform1i(glGetUniformLocation(program, "diamond"), 0);
 }
 
-void loop(GLFWwindow *window) {
+void loop(GLFWwindow *handle) {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -91,7 +91,7 @@ void loop(GLFWwindow *window) {
   glBindVertexArray(VAO);
 
   int width, height;
-  glfwGetFramebufferSize(window, &width, &height);
+  glfwGetFramebufferSize(handle, &width, &height);
   float ratio = (float)width / (float)height;
 
   glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)glfwGetTime(), glm::vec3(1.0f, 1.0f, 1.0f));
@@ -104,11 +104,21 @@ void loop(GLFWwindow *window) {
 }
 
 void cleanup() {
-  glDeleteProgram(program);
   glDeleteVertexArrays(1, &VAO);
   glDeleteBuffers(1, &VBO);
   glDeleteBuffers(1, &EBO);
   glDeleteTextures(1, &texture);
+  glDeleteProgram(program);
 }
 
-int main() { gl::run({"Cube"}, init, loop, cleanup); }
+int main() {
+  gl::Window window("Cube", 500, 500);
+
+  init();
+  while (window) {
+    loop(window.handle);
+    glfwSwapBuffers(window.handle);
+    glfwPollEvents();
+  }
+  cleanup();
+}

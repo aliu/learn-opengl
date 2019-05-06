@@ -2,17 +2,20 @@
 
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
-#include <functional>
 #include <iostream>
 #include <string>
 
-void resize(GLFWwindow *window, int width, int height) {
+void resize_callback(GLFWwindow *handle, int width, int height) {
   glViewport(0, 0, width, height);
 }
 
-void gl::run(gl::Options options, std::function<void()> init,
-             std::function<void(GLFWwindow*)> loop,
-             std::function<void()> cleanup) {
+void error_callback(int error, const char *description) {
+  std::cerr << "Error: " << description << '\n';
+}
+
+gl::Window::Window(std::string title, int width, int height) {
+  glfwSetErrorCallback(error_callback);
+
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -21,25 +24,19 @@ void gl::run(gl::Options options, std::function<void()> init,
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
 
-  GLFWwindow *window = glfwCreateWindow(options.width, options.height,
-                                        options.title.c_str(), NULL, NULL);
-  if (window == NULL) {
-    std::cerr << "Failed to create GLFW window\n";
-  }
+  handle = glfwCreateWindow(width, height, title.c_str(), NULL, NULL);
 
-  glfwMakeContextCurrent(window);
-  glfwSetFramebufferSizeCallback(window, resize);
+  glfwMakeContextCurrent(handle);
+  glfwSetFramebufferSizeCallback(handle, resize_callback);
 
-  if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-    std::cerr << "Failed to initialize GLAD\n";
-  }
+  gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+}
 
-  init();
-  while (!glfwWindowShouldClose(window)) {
-    loop(window);
-    glfwSwapBuffers(window);
-    glfwPollEvents();
-  }
-  cleanup();
+gl::Window::~Window() {
+  glfwDestroyWindow(handle);
   glfwTerminate();
+}
+
+gl::Window::operator bool() {
+  return !glfwWindowShouldClose(handle);
 }

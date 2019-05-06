@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <fstream>
+#include <initializer_list>
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -45,7 +46,7 @@ GLuint compile(const std::string &filename) {
   return shader;
 }
 
-GLuint gl::shader(const std::vector<std::string> &filenames) {
+GLuint gl::shader(std::initializer_list<std::string> filenames) {
   GLuint program = glCreateProgram();
   std::vector<GLuint> shaders;
 
