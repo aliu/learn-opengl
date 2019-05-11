@@ -1,5 +1,7 @@
 add_library(util STATIC
   src/window.cpp
+  src/camera.cpp
+  src/timer.cpp
   src/shader.cpp
   src/image.cpp
   src/fs.h

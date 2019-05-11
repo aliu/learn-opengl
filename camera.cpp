@@ -80,7 +80,7 @@ void init() {
 }
 
 void draw(glm::mat4 transform) {
-  glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+  glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   glActiveTexture(GL_TEXTURE0);
@@ -102,19 +102,18 @@ void cleanup() {
 }
 
 int main() {
-  gl::Window window("Cube", 500, 500);
-  double rotation = 0;
+  gl::Window window("Camera", 500, 500);
+  window.setCamera(glm::vec3(0.0f, 2.0f, 0.0f), glm::vec3(0.0f, 0.0f, -1.0f));
 
   init();
   while (window) {
-    double delta = window.update();
-    rotation += delta;
+    window.update();
 
     auto screen = window.getSize();
     float ratio = (float)screen.first / (float)screen.second;
 
-    glm::mat4 model = glm::rotate(glm::mat4(1.0f), (float)rotation, glm::vec3(1.0f, 1.0f, 1.0f));
-    glm::mat4 view = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -5.0f));
+    glm::mat4 model = glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, -8.0f));
+    glm::mat4 view = window.getView();
     glm::mat4 projection = glm::perspective(0.25f * glm::pi<float>(), ratio, 0.1f, 100.0f);
     glm::mat4 transform = projection * view * model;
 

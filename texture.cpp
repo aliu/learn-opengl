@@ -1,7 +1,6 @@
 #include "util/gl.h"
 
 #include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
 GLuint VAO, VBO, EBO, texture, program;
 
@@ -46,7 +45,7 @@ void init() {
   glUniform1i(glGetUniformLocation(program, "diamond"), 0);
 }
 
-void loop(GLFWwindow *handle) {
+void draw() {
   glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
   glClear(GL_COLOR_BUFFER_BIT);
 
@@ -72,9 +71,10 @@ int main() {
 
   init();
   while (window) {
-    loop(window.handle);
-    glfwSwapBuffers(window.handle);
-    glfwPollEvents();
+    window.update();
+
+    draw();
+    window.render();
   }
   cleanup();
 }
