@@ -41,6 +41,7 @@ public:
 
   std::pair<int, int> getSize();
   glm::mat4 getView();
+  glm::vec3 getPosition();
 
   void setCamera(glm::vec3 position, glm::vec3 front);
   explicit operator bool();
@@ -48,5 +49,8 @@ public:
 
 GLuint shader(std::initializer_list<std::string> filenames);
 GLuint texture2D(const std::string &filename);
+
+void setUniform(GLuint program, const std::string &name, glm::vec3 value);
+void setUniform(GLuint program, const std::string &name, glm::mat4 value);
 
 } // namespace gl

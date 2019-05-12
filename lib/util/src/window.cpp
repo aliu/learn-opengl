@@ -86,6 +86,10 @@ glm::mat4 gl::Window::getView() {
   return camera.view();
 }
 
+glm::vec3 gl::Window::getPosition() {
+  return camera.position;
+}
+
 void gl::Window::setCamera(glm::vec3 position, glm::vec3 front) {
   camera.position = position;
   camera.orient(front);

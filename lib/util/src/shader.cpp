@@ -2,6 +2,9 @@
 #include "fs.h"
 
 #include <glad/glad.h>
+#include <glm/vec3.hpp>
+#include <glm/mat4x4.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <fstream>
 #include <initializer_list>
 #include <iostream>
@@ -71,4 +74,12 @@ GLuint gl::shader(std::initializer_list<std::string> filenames) {
   }
 
   return program;
+}
+
+void gl::setUniform(GLuint program, const std::string &name, glm::vec3 value) {
+  glUniform3f(glGetUniformLocation(program, name.c_str()), value.x, value.y, value.z);
+}
+
+void gl::setUniform(GLuint program, const std::string &name, glm::mat4 value) {
+  glUniformMatrix4fv(glGetUniformLocation(program, name.c_str()), 1, GL_FALSE, glm::value_ptr(value));
 }
