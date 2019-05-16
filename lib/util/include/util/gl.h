@@ -50,6 +50,7 @@ public:
 GLuint shader(std::initializer_list<std::string> filenames);
 GLuint texture2D(const std::string &filename);
 
+void setUniform(GLuint program, const std::string &name, GLint value);
 void setUniform(GLuint program, const std::string &name, glm::vec3 value);
 void setUniform(GLuint program, const std::string &name, glm::mat4 value);
 

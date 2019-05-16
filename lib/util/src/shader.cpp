@@ -76,6 +76,10 @@ GLuint gl::shader(std::initializer_list<std::string> filenames) {
   return program;
 }
 
+void gl::setUniform(GLuint program, const std::string &name, GLint value) {
+  glUniform1i(glGetUniformLocation(program, name.c_str()), value);
+}
+
 void gl::setUniform(GLuint program, const std::string &name, glm::vec3 value) {
   glUniform3f(glGetUniformLocation(program, name.c_str()), value.x, value.y, value.z);
 }
